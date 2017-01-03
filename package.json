@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "2.2.1",
     "@angular/platform-server": "2.2.1",
     "@ionic/storage": "1.1.7",
+    "angular2-qrcode": "^1.0.5",
     "createjs-collection": "^0.8.2-1",
     "firebase": "^3.6.4",
     "ionic-angular": "2.0.0-rc.4",
@@ -38,7 +39,11 @@
     "cordova-plugin-statusbar",
     "cordova-plugin-device",
     "cordova-plugin-splashscreen",
-    "ionic-plugin-keyboard"
+    "ionic-plugin-keyboard",
+    "cordova-plugin-barcodescanner",
+    "cordova-plugin-camera",
+    "cordova-plugin-clipboard",
+    "cordova-plugin-compat"
   ],
   "cordovaPlatforms": [],
   "description": "test-rc4-1: An Ionic project"
