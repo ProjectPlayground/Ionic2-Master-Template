@@ -1,0 +1,24 @@
+  <ion-header>
+    <ion-navbar>
+      <ion-title>
+        MyRPG Sign-Up/Log-In
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+
+
+  <ion-content padding>
+    <div>
+    <ion-list padding>
+      <ion-item>
+        <ion-input type="text" placeholder="Username" [(ngModel)]="user.name" ></ion-input>
+      </ion-item>
+    </ion-list>
+    <button ion-button [disabled]="submitStat" (click)="submit()">Sign-Up</button>
+    <button ion-button [disabled]="logInStat" danger (click)="login()">Log In</button>
+    <button ion-button [disabled]="logInStat" danger (click)="loginServer()">Log In Server</button>
+    <br />
+    {{errorMes}}
+  </div>
+  </ion-content>
+

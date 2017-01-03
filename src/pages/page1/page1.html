@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Page Uno</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="page1">
+  <div class="test">
+    <!--<ion-icon name="wifi"></ion-icon>-->
+  </div>
+  <h3>Welcome {{name}}!</h3>
+  <br />
+  <button ion-button (click)="camera()">Set Photo</button>
+  <br />
+   <img [src]="myImg" />
+  <br />
+  <button ion-button (click)="test()">Test</button>
+  <button ion-button (click)="test2()">Test2</button> 
+  <div *ngIf='tester'>Test</div>
+</ion-content>
