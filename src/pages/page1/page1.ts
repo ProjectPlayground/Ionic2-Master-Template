@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, ModalController, MenuController, NavParams, Platform } from 'ionic-angular';
 import { CanvasPage } from '../canvas/canvas';
 import { Camera } from 'ionic-native';
@@ -36,6 +36,7 @@ export class Page1 {
       this.userData = snap.val();
       if(this.userData){
         this.name = snap.val().name;
+        this.chRef.detectChanges();
       }
     })
   }
@@ -45,7 +46,9 @@ export class Page1 {
     private navParams: NavParams,
     public modalCtrl: ModalController,
     public menu: MenuController,
-    public platform: Platform) {
+    public platform: Platform,
+    private chRef: ChangeDetectorRef
+    ) {
       platform.ready().then((readySource) => {
       console.log('Platform ready from', readySource);
 
