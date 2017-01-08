@@ -16,10 +16,10 @@ export class MyApp {
   constructor(public platform: Platform) {
     // Initialize Firebase
     var config = {
-      apiKey: "",
-      authDomain: "",
-      databaseURL: "",
-      storageBucket: "",
+      apiKey: "AIzaSyCrjiyKQ60zJ2xrUM3JzUCfKFF2NTEtdkI",
+      authDomain: "ajb3-myrpg.firebaseapp.com",
+      databaseURL: "https://ajb3-myrpg.firebaseio.com",
+      storageBucket: "ajb3-myrpg.appspot.com"
     };
     firebase.initializeApp(config);
     // this.initializeApp();

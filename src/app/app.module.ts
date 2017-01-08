@@ -16,6 +16,19 @@ import { CanvasPage } from '../pages/canvas/canvas';
 import { BadWords } from '../assets/providers/bad-words/bad-words';
 
 import { QRCodeModule } from 'angular2-qrcode';
+import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCrjiyKQ60zJ2xrUM3JzUCfKFF2NTEtdkI",
+  authDomain: "ajb3-myrpg.firebaseapp.com",
+  databaseURL: "https://ajb3-myrpg.firebaseio.com",
+  storageBucket: "ajb3-myrpg.appspot.com"
+};
+
+const myFirebaseAuthConfig = {
+  provider: AuthProviders.Password,
+  method: AuthMethods.Password
+}
 
 @NgModule({
   declarations: [
@@ -35,7 +48,8 @@ import { QRCodeModule } from 'angular2-qrcode';
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    QRCodeModule
+    QRCodeModule,
+    AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

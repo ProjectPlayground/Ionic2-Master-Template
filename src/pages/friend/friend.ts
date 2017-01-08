@@ -3,6 +3,7 @@ import { NavController, ToastController, PopoverController } from 'ionic-angular
 import { Clipboard, BarcodeScanner } from 'ionic-native';
 
 import * as firebase from 'firebase';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 @Component({
   templateUrl: 'friend.html'
@@ -14,16 +15,15 @@ export class FriendPage {
   
   friendCode;
   eventMes;
-  @Input()friendList = [];
+  friendList: FirebaseListObservable<any[]>;
   testVal;
-  @Input()fbRequestList;
+  fbRequestList;
   showMyCode;
   qrHide = true;
-  @Input()friendRequestList:any[] = [];
+  friendRequestList: FirebaseListObservable<any[]>;
   fbFriendList;
 
   ionViewWillEnter(){
-    
     //get name //display name
     var user = firebase.auth().currentUser;
     var test = firebase.database().ref('users/' + user.uid);
@@ -32,52 +32,14 @@ export class FriendPage {
       this.userData = snap.val();
     })
   }
-  
-  ionViewWillUnload(){
-    console.log('start off');
-    this.fbRequestList.off();
-    console.log('end off');
-  }
 
-  constructor(private navCtrl: NavController, public toastController: ToastController, public popoverCtrl: PopoverController, private chRef: ChangeDetectorRef) {
+  constructor(private navCtrl: NavController, public toastController: ToastController, public popoverCtrl: PopoverController, private chRef: ChangeDetectorRef, public af: AngularFire) {
     this.user = firebase.auth().currentUser;
     firebase.database().ref('users/' + this.user.uid).once('value', snap => {
       this.userData = snap.val();
     })
-    firebase.database().ref('users-friend-request/' + this.userData.idCode + '/requests').on('child_changed', (snap:any) =>{
-      this.fbRequestList.off();
-      this.friendRequestList = [];
-      this.fbInit(1);
-    });
-    firebase.database().ref('users-friend-data/' + this.userData.idCode + '/friends').on('child_changed', (snap:any) =>{
-      this.fbFriendList.off();
-      this.friendList = [];
-      this.fbInit(2);
-    });
-    this.fbInit(3);
-  }
-
-  fbInit(x){
-    this.fbRequestList = firebase.database().ref('users-friend-request/' + this.userData.idCode + '/requests');
-    this.fbFriendList = firebase.database().ref('users-friend-data/' + this.userData.idCode + '/friends');
-    console.log("init number: " + x);
-    if(x == 1 || x == 3){
-      this.fbRequestList.on('child_added', (snap:any) =>{
-         this.friendRequestList.push(snap.val());
-         this.friendRequestList = this.friendRequestList.slice();
-         this.chRef.detectChanges();
-         console.log(snap.key);
-         console.log("-2-");
-       });
-     }
-     if(x == 2 || x == 3){
-       this.fbFriendList.on('child_added', (snap:any) =>{
-          this.friendList.push(snap.val());
-          this.chRef.detectChanges();
-          console.log(snap.key);
-          console.log("-3-");
-        });
-      }
+    this.friendRequestList = af.database.list('users-friend-request/' + this.userData.idCode + '/requests');
+    this.friendList = af.database.list('users-friend-dta/' + this.userData.idCode + '/friends');
   }
 
   qrTog(){
@@ -172,8 +134,7 @@ export class FriendPage {
       name: friendName,
       id: friendId
     })
-    this.friendRequestList.splice(index, 1);
-    this.chRef.detectChanges();
+    // this.chRef.detectChanges();
   }
 
   runToast(text:string){
