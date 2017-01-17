@@ -22,14 +22,5 @@ export class MyApp {
       storageBucket: "ajb3-myrpg.appspot.com"
     };
     firebase.initializeApp(config);
-    // this.initializeApp();
   }
-  // initializeApp() {
-  //   this.platform.ready().then(() => {
-  //     // Okay, so the platform is ready and our plugins are available.
-  //     // Here you can do any higher level native things you might need.
-  //     // StatusBar.styleDefault();
-  //     // Splashscreen.hide();
-  //   });
-  // }
 }

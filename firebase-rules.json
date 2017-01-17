@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "users": {
+      "$uid": { 
+        ".read":"auth.uid != null",
+        ".write": "auth.uid == $uid"
+      }
+    },
+    "friends":{
+      "$user":{
+        "metaData":{
+          ".read": true,
+          ".write": "auth.uid != null && auth.uid == $user"
+        },
+        "requests":{
+          ".read": "auth.uid == $user",
+          "$friend":{
+            ".read": "auth.uid == $user || auth.uid == $friend",
+            ".write": "auth.uid == $user || auth.uid == $friend"
+          }
+        },
+        "accepts":{
+          ".read": "auth.uid == $user",
+          "$friend":{
+            ".read": "auth.uid == $user || auth.uid == $friend",
+            ".write": "auth.uid == $user || auth.uid == $friend"
+          }
+        },
+        "friends-list":{
+          ".read": "auth.uid == $user",
+          ".write": "auth.uid == $user"
+        }
+      }
+    }
+    }
+}
