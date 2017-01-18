@@ -12,13 +12,8 @@ export class FriendPage {
 
   user;
   userData:any = {idCode: ""};
-  
-  friendCode;
   eventMes;
   friendList: FirebaseListObservable<any[]>;
-  testVal;
-  fbRequestList;
-  showMyCode;
   qrHide = true;
   friendRequestList: FirebaseListObservable<any[]>;
   fbFriendList;
@@ -42,16 +37,13 @@ export class FriendPage {
 
     let fbFriendData = firebase.database().ref('friends/' + this.userData.id + '/accepts/');
     fbFriendData.on('child_added', (snap)=>{
-      var test = snap.val();
-      console.log(test);
-      console.log(snap.val);
+      var snapVal = snap.val();
       let fbMyData = firebase.database().ref('friends/' + this.userData.id + '/friends-list/' + snap.key);
       let fbAccept = firebase.database().ref('friends/' + this.userData.id + '/accepts/' + snap.key);
       fbAccept.remove();
       fbMyData.set({
-        friendCode: test.id,
-        name: test.name,
-        id: test.id
+        name: snapVal.name,
+        id: snapVal.id
       })
     })
   }
@@ -80,14 +72,13 @@ export class FriendPage {
   enterFriend(code){
     let myInfo = this.userData;
     let myId = this.userData.id;
-    let myCode = myInfo.id;
     let myFriendCode = code;
     let fbFriendRequest = firebase.database().ref('friends/' + myFriendCode + '/requests/');
     let fbFriendCheck = firebase.database().ref('friends/' + myFriendCode + '/metaData');
-    let fbAddedCheck = firebase.database().ref('friends/' + myCode + '/friends-list/' + myFriendCode);
+    let fbAddedCheck = firebase.database().ref('friends/' + myId + '/friends-list/' + myFriendCode);
 
     //Check if it's my own code
-    if(myCode == myFriendCode){
+    if(myId == myFriendCode){
       this.eventMes = "This is your code.";
       this.runToast(this.eventMes);
     }else{
@@ -102,11 +93,10 @@ export class FriendPage {
               this.runToast('You are already friends');
             }else{
               //Send request
-              fbFriendRequest.child(myCode).once('value', (snap2:any) => {
+              fbFriendRequest.child(myId).once('value', (snap2:any) => {
                 if(snap2.val() == null){
-                  fbFriendRequest.child(myCode).set({
+                  fbFriendRequest.child(myId).set({
                     requestState: "sent",
-                    friendCode: myCode,
                     name: myInfo.name,
                     id: myId
                   });
@@ -132,8 +122,7 @@ export class FriendPage {
     let fbRequest = firebase.database().ref('friends/' + myId + '/requests/' + id);
 
     fbFriendData.set({
-      friendCode: myId,
-      name: this.userData.name,
+      name: myInfo.name,
       id: myId
     });
 
@@ -148,7 +137,7 @@ export class FriendPage {
   runToast(text:string){
     let toast = this.toastController.create({
       message: text,
-      duration: 3000
+      duration: 5000
     });
     toast.present();
   }
