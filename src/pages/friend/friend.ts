@@ -28,8 +28,6 @@ export class FriendPage {
     var user = firebase.auth().currentUser;
     var test = firebase.database().ref('users/' + user.uid);
     test.on('value', (snap:any) => {
-      console.log("31: " + snap.val());
-      console.log(snap.key);
       this.userData = snap.val();
     })
   }
@@ -64,7 +62,6 @@ export class FriendPage {
 
   copy(){
     var text = this.userData.idCode;
-    console.log(text);
     Clipboard.copy(text);
     Clipboard.paste();
     this.runToast('You can now paste your code');
@@ -115,7 +112,7 @@ export class FriendPage {
                   });
                   this.eventMes = "Request sent";
                   this.runToast(this.eventMes);
-                }else if(snap2.val().requestState == "sent"){
+                }else{
                   this.eventMes = 'Request already sent.';
                   this.runToast(this.eventMes);
                 }
@@ -127,16 +124,12 @@ export class FriendPage {
     }
   }
 
-  accept(code, name, id, index){
+  accept(name, id){
     let myInfo = this.userData;
     let myId = myInfo.id;
-    let myCode = myInfo.id;
-    let myFriendCode = code;
-    let friendName = name;
-    let friendId = id;
-    let fbFriendData = firebase.database().ref('friends/' + myFriendCode + '/accepts/' + myCode);
-    let fbMyData = firebase.database().ref('friends/' + myCode + '/friends-list/' + myFriendCode);
-    let fbRequest = firebase.database().ref('friends/' + myCode + '/requests/' + myFriendCode);
+    let fbFriendData = firebase.database().ref('friends/' + id + '/accepts/' + myId);
+    let fbMyData = firebase.database().ref('friends/' + myId + '/friends-list/' + id);
+    let fbRequest = firebase.database().ref('friends/' + myId + '/requests/' + id);
 
     fbFriendData.set({
       friendCode: myId,
@@ -145,9 +138,8 @@ export class FriendPage {
     });
 
     fbMyData.set({
-      friendCode: myFriendCode,
-      name: friendName,
-      id: friendId
+      name: name,
+      id: id
     })
     
     fbRequest.remove();

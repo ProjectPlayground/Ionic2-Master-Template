@@ -13,8 +13,8 @@
     <ion-item *ngFor="let friend of friendRequestList | async;" [hidden]="friend.requestState != 'sent'">
       <h2>{{friend.name}}</h2>
       <ion-buttons item-left>
-        <button ion-button (click)="accept(friend.friendCode, friend.name, friend.id, friend.id)">Accept</button>
-        <button ion-button danger (click)="decline(friend.friendCode, friend.name, friend.id)">Decline</button>
+        <button ion-button (click)="accept(friend.name, friend.id)">Accept</button>
+        <button ion-button danger (click)="decline(friend.name, friend.id)">Decline</button>
       </ion-buttons>
     </ion-item>
   </ion-list>
