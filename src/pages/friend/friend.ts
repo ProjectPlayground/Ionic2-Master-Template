@@ -115,14 +115,14 @@ export class FriendPage {
   }
 
   accept(name, id){
-    let myInfo = this.userData;
-    let myId = myInfo.id;
+    let myName = this.userData.name;
+    let myId = this.userData.id;
     let fbFriendData = firebase.database().ref('friends/' + id + '/accepts/' + myId);
     let fbMyData = firebase.database().ref('friends/' + myId + '/friends-list/' + id);
     let fbRequest = firebase.database().ref('friends/' + myId + '/requests/' + id);
 
     fbFriendData.set({
-      name: myInfo.name,
+      name: myName,
       id: myId
     });
 
@@ -132,6 +132,17 @@ export class FriendPage {
     })
     
     fbRequest.remove();
+  }
+
+  decline(name, id){
+    let myId = this.userData.id;
+    let fbRequest = firebase.database().ref('friends/' + myId + '/requests/' + id);
+
+    fbRequest.set({
+                    requestState: "decline",
+                    name: name,
+                    id: myId
+                  });
   }
 
   runToast(text:string){

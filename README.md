@@ -5,4 +5,6 @@ Ionic2-rc4
 *Createjs
 *Firebase
 
-Next tasks: add 'ignore friend request' function, create user name search, add 'remove friend' function
+Next tasks: create user name search, add 'remove friend' function
+
+Tasks completed: add 'ignore friend request'
