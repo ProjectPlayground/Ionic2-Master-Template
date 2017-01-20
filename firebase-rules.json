@@ -29,8 +29,15 @@
         "friends-list":{
           ".read": "auth.uid == $user",
           ".write": "auth.uid == $user"
+        },
+        "remove":{
+          ".read": "auth.uid == $user",
+          "$friend":{
+            ".read": "auth.uid == $user || auth.uid == $friend",
+            ".write": "auth.uid == $user || auth.uid == $friend"
+          }
         }
       }
     }
-    }
+	}
 }

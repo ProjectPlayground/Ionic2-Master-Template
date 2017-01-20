@@ -36,6 +36,16 @@ export class FriendPage {
     this.friendList = af.database.list('friends/' + this.userData.id + '/friends-list');
 
     let fbFriendData = firebase.database().ref('friends/' + this.userData.id + '/accepts/');
+    let fbFriendRemove = firebase.database().ref('friends/' + this.userData.id + '/remove/');
+    fbFriendRemove.on('child_added', (snap1)=>{
+      var snapVal = snap1.val();
+      console.log(snapVal);
+      console.log(snap1);
+      let fbMyData = firebase.database().ref('friends/' + this.userData.id + '/friends-list/' + snap1.key);
+      let fbFriendRemove = firebase.database().ref('friends/' + this.userData.id + '/remove/' + snap1.key);      
+      fbMyData.remove();
+      fbFriendRemove.remove();
+    })
     fbFriendData.on('child_added', (snap)=>{
       var snapVal = snap.val();
       let fbMyData = firebase.database().ref('friends/' + this.userData.id + '/friends-list/' + snap.key);
@@ -143,6 +153,15 @@ export class FriendPage {
                     name: name,
                     id: myId
                   });
+  }
+
+  removeFriend(id){
+    let myId = this.userData.id;
+    let fbMyData = firebase.database().ref('friends/' + myId + '/friends-list/' + id);
+    let fbFriendData = firebase.database().ref('friends/' + id + '/remove/' + myId);
+    
+    fbMyData.remove();
+    fbFriendData.set({remove: myId});
   }
 
   runToast(text:string){
