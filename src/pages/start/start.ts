@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, ChangeDetectorRef} from '@angular/core';
 import {Nav, NavController, ToastController, NavParams, MenuController} from 'ionic-angular';
 import * as firebase from 'firebase';
 
@@ -46,7 +46,8 @@ export class StartPage {
     private toastController : ToastController,
     private navParams: NavParams,
     public menu: MenuController,
-    public af: AngularFire
+    public af: AngularFire,
+    private chRef: ChangeDetectorRef
     ) {}
 
   submit(){
@@ -56,14 +57,26 @@ export class StartPage {
     this.newUser = true;
     var email = this.user.name + "@aj.com";
     var password = "abc123";
-    //create user
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
-      // Handle Errors here.
-      var errorMessage = error;
-      this.errorMes = errorMessage;
-      if(error){
+    var userList = firebase.database().ref('user-list/' + this.user.name);
+    console.log(this.user.name);
+    userList.once('value', (ul)=>{
+      var val = ul.val();
+      console.log(val);
+      if(val){
+        this.errorMes = "User exsists";
         this.submitStat = false;
         this.logInStat = false;
+      }else{
+        //create user
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch((error) => {
+          // Handle Errors here.
+          var errorMessage = error;
+          this.errorMes = errorMessage;
+          if(error){
+            this.submitStat = false;
+            this.logInStat = false;
+          }
+        })
       }
     })
   }
@@ -76,12 +89,13 @@ export class StartPage {
     var email = this.user.name + "@aj.com";
     var password = "abc123";
     //log-in user
-    firebase.auth().signInWithEmailAndPassword(email, password).catch((error:any) => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch((error) => {
+      console.log("Firebase failure: " + JSON.stringify(error));
       // Handle Errors here.
-      if(error){
         this.submitStat = false;
         this.logInStat = false;
-      }
+        this.chRef.detectChanges(); 
     });
   }
 

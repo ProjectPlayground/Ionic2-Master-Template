@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { NavController, ToastController, PopoverController } from 'ionic-angular';
-import { Clipboard, BarcodeScanner } from 'ionic-native';
+import { Clipboard, BarcodeScanner, Camera } from 'ionic-native';
+import QrCode from 'qrcode-reader';
 
 import * as firebase from 'firebase';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
@@ -78,8 +79,37 @@ export class FriendPage {
     });
   }
 
+  test(){
+    var qr = new QrCode();
+    qr.callback = (result,err) => { if(result) this.enter(result) }
+    var options = {
+      sourceType: 0,
+      destinationType: 2
+    }
+    Camera.getPicture(options).then((imageData) => {
+    // imageData is either a base64 encoded string or a file URI
+    // If it's base64:
+    // let base64Image = 'data:image/jpeg;base64,' + imageData;
+    qr.decode(imageData);
+    }, (err) => {
+    // Handle error
+    });
+  }
+
+  enterFriend(name){
+    var userList = firebase.database().ref('user-list/' + name);
+    userList.once('value', (ul)=>{
+      var val = ul.val();
+      if(val != null){
+        this.enter(val.id);
+      }else{
+        this.runToast('User does not exsist');
+      }
+    })
+  }
+
   //Send Friend Request
-  enterFriend(code){
+  enter(code){
     let myInfo = this.userData;
     let myId = this.userData.id;
     let myFriendCode = code;
