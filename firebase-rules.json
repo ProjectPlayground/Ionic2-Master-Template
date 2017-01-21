@@ -38,6 +38,18 @@
           }
         }
       }
+    },
+    "active":{
+      ".write":true,
+      ".read":true
+    },
+    "requests":{
+      ".read": true,
+      ".write": true
+    },
+    "user-list":{
+      ".read": true,
+      ".write": "auth.uid == '3QzcifrIYiRwFYAKgpAnWuGwMYl1'"
     }
 	}
 }
