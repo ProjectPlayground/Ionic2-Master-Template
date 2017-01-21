@@ -1,8 +1,8 @@
 # -Master Ionic Templete-
-##Ionic2-rc5
-*Createjs
-*Firebase
-*Basic User System
+####Ionic2-rc5
+Createjs
+Firebase
+Basic User System
 
 Next tasks: finish qrcode-scanner, add screenshot function to qrcoce
 
