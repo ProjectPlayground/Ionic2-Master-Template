@@ -13,6 +13,7 @@ import { FriendPage } from '../pages/friend/friend';
 import { SideMenu } from '../pages/side-menu/side-menu';
 import { ServerPage } from '../pages/server/server';
 import { CanvasPage } from '../pages/canvas/canvas';
+import { QR } from '../pages/qr/qr';
 import { BadWords } from '../assets/providers/bad-words/bad-words';
 
 import { QRCodeModule } from 'angular2-qrcode';
@@ -43,7 +44,8 @@ const myFirebaseAuthConfig = {
     FriendPage,
     SideMenu,
     ServerPage,
-    CanvasPage
+    CanvasPage,
+    QR
 
   ],
   imports: [
@@ -64,7 +66,8 @@ const myFirebaseAuthConfig = {
     FriendPage,
     SideMenu,
     ServerPage,
-    CanvasPage
+    CanvasPage,
+    QR
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })

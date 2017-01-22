@@ -1,3 +1,14 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button (click)="dismiss()">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>QR Code</ion-title>
+  </ion-navbar>
+</ion-header>
 <ion-content padding>
-  <qr-code [data]="'userData.idCode'" [size]="150"></qr-code>
+  <h1>{{name}}</h1>
+  <button (click)="shot()">
+    <qr-code [data]="name" [size]="350" [type]=4></qr-code>
+  </button>
 </ion-content>

@@ -1,10 +1,13 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
-import { NavController, ToastController, PopoverController } from 'ionic-angular';
+import { NavController, ToastController, ModalController  } from 'ionic-angular';
 import { Clipboard, BarcodeScanner, Camera } from 'ionic-native';
+import { QR } from '../qr/qr';
 import QrCode from 'qrcode-reader';
 
 import * as firebase from 'firebase';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
+
+
 
 @Component({
   templateUrl: 'friend.html'
@@ -28,7 +31,7 @@ export class FriendPage {
     })
   }
 
-  constructor(private navCtrl: NavController, public toastController: ToastController, public popoverCtrl: PopoverController, private chRef: ChangeDetectorRef, public af: AngularFire) {
+  constructor(private navCtrl: NavController, public toastController: ToastController, private chRef: ChangeDetectorRef, public af: AngularFire, public modalCtrl: ModalController) {
     this.user = firebase.auth().currentUser;
     firebase.database().ref('users/' + this.user.uid).once('value', snap => {
       this.userData = snap.val();
@@ -60,7 +63,9 @@ export class FriendPage {
   }
 
   qrTog(){
-    this.qrHide = !this.qrHide;   
+    // this.qrHide = !this.qrHide;
+   let profileModal = this.modalCtrl.create(QR, {name: this.userData.name});
+   profileModal.present();
   }
 
   copy(){
