@@ -18,6 +18,7 @@ import { BadWords } from '../assets/providers/bad-words/bad-words';
 
 import { QRCodeModule } from 'angular2-qrcode';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
+import * as firebase from 'firebase';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCrjiyKQ60zJ2xrUM3JzUCfKFF2NTEtdkI",
@@ -71,4 +72,8 @@ const myFirebaseAuthConfig = {
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
-export class AppModule {}
+export class AppModule {
+  constructor(){
+    firebase.initializeApp(firebaseConfig);
+  }
+}
