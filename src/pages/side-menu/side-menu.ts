@@ -22,6 +22,7 @@ export class SideMenu {
   rootPage: any = StartPage;
 
   backButton;
+  myAuth;
 
   pages: Array<{title: string, component: any, active: boolean, class: string}>;
 
@@ -67,6 +68,12 @@ export class SideMenu {
         }
       });
     });
+
+    this.myAuth = firebase.auth().onAuthStateChanged((user) => {
+      if(user == null){
+        this.nav.setRoot(StartPage, {test: null});        
+      }
+    })
   }
 
   openPage(page) {
@@ -80,7 +87,6 @@ export class SideMenu {
         //Sign Off Firebase
         firebase.auth().signOut();
         // Return to Log In
-        this.nav.setRoot(StartPage, {test: null});
       }else{
         // Reset the content nav to have just this page
         // we wouldn't want the back button to show in this scenario
