@@ -88,10 +88,9 @@ export class FriendPage {
     var qr = new QrCode();
     qr.callback = (result,err) => {
        if(result) {
-         alert(result);
          this.enterFriend(result);
         }else{
-          alert('qr scan failed');
+          this.runToast('qr scan failed');
         } 
       }
     var options = {
