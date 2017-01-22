@@ -88,10 +88,11 @@ export class StartPage {
     this.logInStat = true;
     var email = this.user.name + "@aj.com";
     var password = "abc123";
+    this.chRef.detectChanges();     
     //log-in user
     firebase.auth().signInWithEmailAndPassword(email, password)
     .catch((error) => {
-      console.log("Firebase failure: " + JSON.stringify(error));
+      this.errorMes = error.message;
       // Handle Errors here.
         this.submitStat = false;
         this.logInStat = false;
