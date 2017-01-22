@@ -72,16 +72,23 @@ export class FriendPage {
 
   scan(){
     BarcodeScanner.scan().then((barcodeData) => {
-     this.enterFriend(barcodeData.text);
+     this.enter(barcodeData.text);
     }, (err) => {
         // An error occurred
         this.runToast(err);
     });
   }
 
-  test(){
+  qrImg(){
     var qr = new QrCode();
-    qr.callback = (result,err) => { if(result) this.enter(result) }
+    qr.callback = (result,err) => {
+       if(result) {
+         alert(result);
+         this.enterFriend(result);
+        }else{
+          alert('qr scan failed');
+        } 
+      }
     var options = {
       sourceType: 0,
       destinationType: 2

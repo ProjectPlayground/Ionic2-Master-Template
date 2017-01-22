@@ -6,8 +6,8 @@
 
 <ion-content padding>
     <ion-textarea [(ngModel)]="userData.id"></ion-textarea>
-    <button ion-button (click)="copy()">Copy</button><button ion-button (click)="qrTog()">QR</button><button ion-button (click)="scan()">Scan QR</button>
-    <div [hidden]="qrHide"><qr-code [data]="userData.id" [size]="350" [type]=4></qr-code></div>
+    <button ion-button (click)="qrImg()">QR Image</button><button ion-button (click)="qrTog()">QR</button><button ion-button (click)="scan()">Scan QR</button>
+    <div [hidden]="qrHide"><qr-code [data]="userData.name" [size]="350" [type]=4></qr-code></div>
   <ion-list>
     <ion-item *ngFor="let friend of friendRequestList | async;" [hidden]="friend.requestState != 'sent'">
       <h2>{{friend.name}}</h2>
