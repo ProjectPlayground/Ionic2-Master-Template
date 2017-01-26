@@ -24,7 +24,7 @@
     "angularfire2": "^2.0.0-beta.7",
     "createjs-collection": "^0.8.2-1",
     "firebase": "^3.6.6",
-    "ionic-angular": "2.0.0-rc.5",
+    "ionic-angular": "2.0.0",
     "ionic-native": "2.2.11",
     "ionicons": "3.0.0",
     "qrcode-reader": "^0.2.2",
