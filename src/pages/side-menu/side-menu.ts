@@ -8,8 +8,10 @@ import { StartPage } from '../start/start';
 import { FriendPage } from '../friend/friend';
 import { ServerPage } from '../server/server';
 import { CanvasPage } from '../canvas/canvas';
+import { RedirectPage } from '../redirect/redirect';
 
 import * as firebase from 'firebase';
+import { AngularFire } from 'angularfire2';
 
 
 @Component({
@@ -23,10 +25,11 @@ export class SideMenu {
 
   backButton;
   myAuth;
+  user;  
 
   pages: Array<{title: string, component: any, active: boolean, class: string}>;
 
-  constructor(public platform: Platform, public menuCtrl: MenuController) {
+  constructor(public platform: Platform, public menuCtrl: MenuController, public af: AngularFire) {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: Page1, active: false, class: "black" },
@@ -36,6 +39,8 @@ export class SideMenu {
       { title: 'Preferences', component: TabsPage, active: false, class: "black" },
       {title: 'Sign Off', component: true, active: true, class: "red" }
     ];
+
+    this.af.auth.subscribe(auth => this.user = auth);
   }
 
   ionViewDidEnter() {
@@ -68,12 +73,6 @@ export class SideMenu {
         }
       });
     });
-
-    this.myAuth = firebase.auth().onAuthStateChanged((user) => {
-      if(user == null){
-        this.nav.setRoot(StartPage, {test: null});        
-      }
-    })
   }
 
   openPage(page) {
@@ -84,9 +83,14 @@ export class SideMenu {
         console.log('sign out');
         //Reset Back Button
         this.backButton();
+
+        firebase.database().ref('friends/' + this.user.uid + '/friends-list').on('child_added', flSnap => {
+          var v = flSnap.key;
+          console.log(v);
+          firebase.database().ref('friends/' + v + '/friends-list/' + this.user.uid + '/state').set({val: 'offline'});
+        })
         //Sign Off Firebase
-        firebase.auth().signOut();
-        // Return to Log In
+        this.nav.setRoot(RedirectPage);
       }else{
         // Reset the content nav to have just this page
         // we wouldn't want the back button to show in this scenario

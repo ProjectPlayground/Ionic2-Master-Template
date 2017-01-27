@@ -6,6 +6,13 @@ import { Page1 } from '../page1/page1';
 
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCrjiyKQ60zJ2xrUM3JzUCfKFF2NTEtdkI",
+  authDomain: "ajb3-myrpg.firebaseapp.com",
+  databaseURL: "https://ajb3-myrpg.firebaseio.com",
+  storageBucket: "ajb3-myrpg.appspot.com"
+};
+
 @Component({
   templateUrl: 'start.html'
 })
@@ -14,7 +21,6 @@ export class StartPage {
   @ViewChild(Nav) nav: Nav;
 
   newUser:boolean = false;
-  p;
   myAuth;
 
   user = {name:"", password:""};
@@ -27,9 +33,6 @@ export class StartPage {
   ionViewDidEnter(){
     //disable side menu
     this.menu.enable(false);
-    //Make sure SignIn.Auth fires once
-    this.p = this.navParams.get('test');
-
     this.init();
   }
 
@@ -48,7 +51,7 @@ export class StartPage {
     public menu: MenuController,
     public af: AngularFire,
     private chRef: ChangeDetectorRef
-    ) {}
+  ) {}
 
   submit(){
     ////Submit Sign-Up request
@@ -102,8 +105,6 @@ export class StartPage {
 
   init(){
     ////Initialize
-    //Make sure Auth fires once
-    if(this.p || this.p == null){
     // Check if logged in
     this.myAuth = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -122,6 +123,12 @@ export class StartPage {
             });
           }
         })
+        firebase.database().ref('friends/' + user.uid + '/friends-list').on('child_added', flSnap => {
+          var v = flSnap.key;
+          console.log(v);
+          firebase.database().ref('friends/' + v + '/friends-list/' + user.uid + '/state').set({val: 'online'});
+          firebase.database().ref('friends/' + v + '/friends-list/' + user.uid + '/state').onDisconnect().set({val: 'offline'});
+        })
         //Go to home page
         this.navCtrl.setRoot(Page1, {name: this.user.name});
       }
@@ -133,10 +140,8 @@ export class StartPage {
          if (snap.val() === true) {
            console.log('connected');
            this.submitStat = false;
-           this.p = true;
          }else{
            console.log('not connected');
-           this.p = false;
            let toast = this.toastController.create({
              message: 'Sorry you are not connected',
              duration: 3000
@@ -144,9 +149,8 @@ export class StartPage {
            if(n > 0){
             toast.present();
           }
-          n = n + 1;
+          n++;
          }
        });
      }
-   }
 }

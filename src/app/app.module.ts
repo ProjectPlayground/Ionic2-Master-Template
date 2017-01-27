@@ -13,6 +13,7 @@ import { FriendPage } from '../pages/friend/friend';
 import { SideMenu } from '../pages/side-menu/side-menu';
 import { ServerPage } from '../pages/server/server';
 import { CanvasPage } from '../pages/canvas/canvas';
+import { RedirectPage } from '../pages/redirect/redirect';
 import { QR } from '../pages/qr/qr';
 import { BadWords } from '../assets/providers/bad-words/bad-words';
 
@@ -46,6 +47,7 @@ const myFirebaseAuthConfig = {
     SideMenu,
     ServerPage,
     CanvasPage,
+    RedirectPage,
     QR
 
   ],
@@ -68,6 +70,7 @@ const myFirebaseAuthConfig = {
     SideMenu,
     ServerPage,
     CanvasPage,
+    RedirectPage,
     QR
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
