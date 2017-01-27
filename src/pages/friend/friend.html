@@ -23,7 +23,7 @@
 
   <ion-list>
     <ion-item *ngFor="let friend of friendList | async">
-      {{friend.name}}
+      {{friend.name}} || {{friend.state.val}}
       <ion-buttons item-left>
         <button ion-button (click)="removeFriend(friend.id)">Remove</button>
       </ion-buttons>

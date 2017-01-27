@@ -39,6 +39,13 @@ export class FriendPage {
     this.friendRequestList = af.database.list('friends/' + this.userData.id + '/requests');
     this.friendList = af.database.list('friends/' + this.userData.id + '/friends-list');
 
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user == null){
+        this.friendRequestList = null;
+        this.friendList = null;
+      }
+    })
+
     let fbFriendData = firebase.database().ref('friends/' + this.userData.id + '/accepts/');
     let fbFriendRemove = firebase.database().ref('friends/' + this.userData.id + '/remove/');
     fbFriendRemove.on('child_added', (snap1)=>{
@@ -57,7 +64,8 @@ export class FriendPage {
       fbAccept.remove();
       fbMyData.set({
         name: snapVal.name,
-        id: snapVal.id
+        id: snapVal.id,
+        state: {'val': 'offline'}
       })
     })
   }
@@ -179,7 +187,8 @@ export class FriendPage {
 
     fbMyData.set({
       name: name,
-      id: id
+      id: id,
+      state: { 'val': 'offline'}
     })
     
     fbRequest.remove();
