@@ -4,14 +4,7 @@ import * as firebase from 'firebase';
 
 import { Page1 } from '../page1/page1';
 
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCrjiyKQ60zJ2xrUM3JzUCfKFF2NTEtdkI",
-  authDomain: "ajb3-myrpg.firebaseapp.com",
-  databaseURL: "https://ajb3-myrpg.firebaseio.com",
-  storageBucket: "ajb3-myrpg.appspot.com"
-};
+import { AngularFire } from 'angularfire2';
 
 @Component({
   templateUrl: 'start.html'
@@ -99,7 +92,7 @@ export class StartPage {
       // Handle Errors here.
         this.submitStat = false;
         this.logInStat = false;
-        this.chRef.detectChanges(); 
+        // this.chRef.detectChanges(); 
     });
   }
 
@@ -123,6 +116,7 @@ export class StartPage {
             });
           }
         })
+        //Let friends know your online
         firebase.database().ref('friends/' + user.uid + '/friends-list').on('child_added', flSnap => {
           var v = flSnap.key;
           console.log(v);

@@ -84,11 +84,13 @@ export class SideMenu {
         //Reset Back Button
         this.backButton();
 
+        //Let your friends know you're off line
         firebase.database().ref('friends/' + this.user.uid + '/friends-list').on('child_added', flSnap => {
           var v = flSnap.key;
           console.log(v);
           firebase.database().ref('friends/' + v + '/friends-list/' + this.user.uid + '/state').set({val: 'offline'});
         })
+
         //Sign Off Firebase
         this.nav.setRoot(RedirectPage);
       }else{

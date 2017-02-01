@@ -5,10 +5,10 @@ import { QR } from '../qr/qr';
 import QrCode from 'qrcode-reader';
 
 import * as firebase from 'firebase';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 
 
-
+@Input()
 @Component({
   templateUrl: 'friend.html'
 })
@@ -17,9 +17,9 @@ export class FriendPage {
   user;
   userData:any = {idCode: ""};
   eventMes;
-  friendList: FirebaseListObservable<any[]>;
+  friendList;
   qrHide = true;
-  friendRequestList: FirebaseListObservable<any[]>;
+  friendRequestList;
   fbFriendList;
 
   ionViewWillEnter(){
@@ -28,6 +28,8 @@ export class FriendPage {
     var test = firebase.database().ref('users/' + user.uid);
     test.on('value', (snap:any) => {
       this.userData = snap.val();
+      this.friendRequestList = this.af.database.list('friends/' + this.userData.id + '/requests');
+      this.friendList = this.af.database.list('friends/' + this.userData.id + '/friends-list');
     })
   }
 
@@ -35,38 +37,6 @@ export class FriendPage {
     this.user = firebase.auth().currentUser;
     firebase.database().ref('users/' + this.user.uid).once('value', snap => {
       this.userData = snap.val();
-    })
-    this.friendRequestList = af.database.list('friends/' + this.userData.id + '/requests');
-    this.friendList = af.database.list('friends/' + this.userData.id + '/friends-list');
-
-    firebase.auth().onAuthStateChanged((user) => {
-      if(user == null){
-        this.friendRequestList = null;
-        this.friendList = null;
-      }
-    })
-
-    let fbFriendData = firebase.database().ref('friends/' + this.userData.id + '/accepts/');
-    let fbFriendRemove = firebase.database().ref('friends/' + this.userData.id + '/remove/');
-    fbFriendRemove.on('child_added', (snap1)=>{
-      var snapVal = snap1.val();
-      console.log(snapVal);
-      console.log(snap1);
-      let fbMyData = firebase.database().ref('friends/' + this.userData.id + '/friends-list/' + snap1.key);
-      let fbFriendRemove = firebase.database().ref('friends/' + this.userData.id + '/remove/' + snap1.key);      
-      fbMyData.remove();
-      fbFriendRemove.remove();
-    })
-    fbFriendData.on('child_added', (snap)=>{
-      var snapVal = snap.val();
-      let fbMyData = firebase.database().ref('friends/' + this.userData.id + '/friends-list/' + snap.key);
-      let fbAccept = firebase.database().ref('friends/' + this.userData.id + '/accepts/' + snap.key);
-      fbAccept.remove();
-      fbMyData.set({
-        name: snapVal.name,
-        id: snapVal.id,
-        state: {'val': 'offline'}
-      })
     })
   }
 
@@ -176,27 +146,29 @@ export class FriendPage {
   accept(name, id){
     let myName = this.userData.name;
     let myId = this.userData.id;
-    let fbFriendData = firebase.database().ref('friends/' + id + '/accepts/' + myId);
-    let fbMyData = firebase.database().ref('friends/' + myId + '/friends-list/' + id);
-    let fbRequest = firebase.database().ref('friends/' + myId + '/requests/' + id);
+    let fbFriendData = this.af.database.object('friends/' + id + '/friends-list/' + myId);
+    let fbMyData = this.af.database.object('friends/' + myId + '/friends-list/' + id);
+    let fbRequest = this.af.database.object('friends/' + myId + '/requests/' + id);
 
     fbFriendData.set({
       name: myName,
-      id: myId
+      id: myId,
+      state: {'val': 'online'}
     });
 
     fbMyData.set({
       name: name,
       id: id,
-      state: { 'val': 'offline'}
+      state: {'val': 'offline'}
     })
-    
+
     fbRequest.remove();
+    
   }
 
   decline(name, id){
     let myId = this.userData.id;
-    let fbRequest = firebase.database().ref('friends/' + myId + '/requests/' + id);
+    let fbRequest = this.af.database.object('friends/' + myId + '/requests/' + id);
 
     fbRequest.set({
                     requestState: "decline",
@@ -207,11 +179,11 @@ export class FriendPage {
 
   removeFriend(id){
     let myId = this.userData.id;
-    let fbMyData = firebase.database().ref('friends/' + myId + '/friends-list/' + id);
-    let fbFriendData = firebase.database().ref('friends/' + id + '/remove/' + myId);
+    let fbMyData = this.af.database.object('friends/' + myId + '/friends-list/' + id);
+    let fbFriendData = this.af.database.object('friends/' + id + '/friends-list/' + myId);
     
     fbMyData.remove();
-    fbFriendData.set({remove: myId});
+    fbFriendData.remove();
   }
 
   runToast(text:string){
